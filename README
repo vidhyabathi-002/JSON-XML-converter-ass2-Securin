@@ -1,0 +1,132 @@
+# JSON → XML Converter ✅
+
+**Project:** JSON to XML Converter  
+**Author:** Vidhyabathi K
+
+---
+
+## Overview 💡
+A small, dependency-free Python utility that converts JSON documents into a compact XML representation using a deterministic mapping. The converter supports JSON objects and arrays as top-level values and safely escapes XML special characters.
+
+---
+
+## Features ✨
+- Pure Python standard library only (no external dependencies)
+- Deterministic mapping of JSON types to XML tags
+- Proper XML escaping for text values
+- Simple CLI: read JSON file → write XML file
+
+---
+
+## Requirements 🔧
+- Python 3.6+ (uses f-strings)
+- Cross-platform: Windows, macOS, Linux
+
+---
+
+## Quick start — Run the converter ▶️
+
+Usage:
+
+```bash
+python converter.py <input.json> <output.xml>
+```
+
+Example:
+
+```bash
+python converter.py tests/sample1.json result.xml
+```
+
+Expected output on success:
+
+```
+Conversion completed successfully
+```
+
+Exit codes:
+- `0` — success
+- `1` — usage error (wrong args) or invalid top-level JSON (must be object or array)
+
+---
+
+## JSON → XML mapping (details) 🔍
+- JSON object → `<object>` (child objects use `name="<key>"`)
+- JSON array → `<array>` (child arrays use `name="<key>"`)
+- JSON string → `<string>`
+- JSON number → `<number>` (int or float)
+- JSON boolean → `<boolean>` with `true`/`false` (lowercase)
+- JSON null → `<null/>` (self-closing; can include `name` attribute)
+
+Notes:
+- Keys of object properties are added as a `name` attribute on the child's element.
+- Array elements are positional and do not have `name` attributes.
+- All text content is escaped with `xml.sax.saxutils.escape` to ensure valid XML.
+
+---
+
+## Examples 📁
+Given `tests/sample1.json`:
+
+```json
+{
+  "organization": {"name":"Securin","type":"Inc","building_number":4},
+  "security_related": true,
+  "array_example0": ["red","green"]
+}
+```
+
+The XML output begins as:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<object>
+  <object name="organization">
+    <string name="name">Securin</string>
+    <string name="type">Inc</string>
+    <number name="building_number">4</number>
+  </object>
+  <boolean name="security_related">true</boolean>
+  <array name="array_example0"><string>red</string><string>green</string></array>
+</object>
+```
+
+> Note: Output is compacted by default; you can pretty-print with external tools if you need human-readable indentation.
+
+---
+
+## Implementation notes & limitations ⚠️
+- The top-level JSON must be an object or an array; other types will cause the program to exit with an error.
+- Unsupported Python types (custom objects) will raise `TypeError`.
+- The converter loads the entire JSON into memory (not streaming) — for very large files, consider a streaming parser.
+- No `--pretty` CLI flag is available in this version.
+
+---
+
+## Tests & verification ✅
+- Example inputs: `tests/sample1.json`, `tests/sample2.json`
+- Run and inspect output:
+
+```bash
+python converter.py tests/sample1.json result.xml
+# open result.xml in an editor to verify content
+```
+
+---
+
+## Potential improvements / contributions 🙌
+- Add CLI flags: `--pretty`, `--encoding`, `--indent`
+- Add streaming parsing for very large JSON files
+- Add unit tests and CI configuration
+- Add optional XML schema validation or XSLT transformation
+
+---
+
+## License & Contact 📬
+- **Author:** Vidhyabathi K
+- **License:** (not specified) — add an MIT or similar license to make the project explicitly open-source.
+
+---
+
+*If you'd like, I can also add unit tests and a `--pretty` option — tell me which you'd prefer next.*
+
