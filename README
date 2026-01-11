@@ -24,6 +24,11 @@ A small, dependency-free Python utility that converts JSON documents into a comp
 
 ---
 
+## Build
+No build is required. A convenience `build.sh` script is included for consistency; the converter uses only Python standard libraries.
+
+---
+
 ## Quick start — Run the converter ▶️
 
 Usage:
@@ -46,7 +51,11 @@ Conversion completed successfully
 
 Exit codes:
 - `0` — success
-- `1` — usage error (wrong args) or invalid top-level JSON (must be object or array)
+- `1` — usage error (wrong args) or invalid top-level JSON (must be an object or an array)
+
+View the output file:
+- On Linux/macOS: `cat result.xml`
+- On Windows (PowerShell/CMD): `type result.xml` or open in an editor
 
 ---
 
